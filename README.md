@@ -41,5 +41,9 @@ For both reportability classification, symptom similarity between patient’s ph
 <img src="data/images/figure5_feature_importance.png" width="800">
 
 ## Individual case review
-**Figure 6**.  A 3 year-old patient with global developmental delay, abnormal intestine morphology, facial dysmorphism, and hearing loss had NM_001080516.2:c.88C>T and NC_000005.9:g.(?_113366)_(2755155_?)del. This patient was diagnosed with Deafness, autosomal recessive 101 (OMIM: 615837), and Cri-Du-Chat syndrome (OMIM: 123450). 3ASC predicted the casual CNV as rank 1 with 0.99 of model confidence, and casual SNV as rank 3 with 0.66 of model confidence. After SNV and CNV of this patient projected by 3ASC embedding layer were showed in manifold, high pathogenic and symptom similarity SNV and CNV were clustered. In addition, although features of SNV and CNV were different, these variant semantically clustered
+A 3 year-old patient with global developmental delay, abnormal intestine morphology, facial dysmorphism, and hearing loss had NM_001080516.2:c.88C>T and NC_000005.9:g.(?_113366)_(2755155_?)del. This patient was diagnosed with Deafness, autosomal recessive 101 (OMIM: 615837), and Cri-Du-Chat syndrome (OMIM: 123450). 3ASC predicted the casual CNV as rank 1 with 0.99 of model confidence, and casual SNV as rank 3 with 0.66 of model confidence. After SNV and CNV of this patient projected by 3ASC embedding layer were showed in manifold, high pathogenic and symptom similarity SNV and CNV were clustered. In addition, although features of SNV and CNV were different, these variant semantically clustered
+
+
+**Figure 6**.  Visualization of multiple inputs (CNV+SNV) encoded feature in manifold.
+
 <img src="data/images/figure6.PNG" width="400">

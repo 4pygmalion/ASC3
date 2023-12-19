@@ -1,0 +1,24 @@
+tornado
+pexpect
+openpyxl # for read_excel
+pytest==7.2.1
+pronto==2.5.1
+pandas==1.5.3
+fastapi==0.95.1
+mlflow==2.7.1
+locust
+tqdm
+httpx
+scikit-learn==1.1.2
+matplotlib
+uvicorn
+omegaconf
+boto3
+torch # for MIL
+progress # for MIL
+sparsemax # for MIL
+pytorch-tabnet # for MIL
+seaborn 
+
+# for experiment
+boto3

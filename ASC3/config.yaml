@@ -1,0 +1,61 @@
+MODEL:
+  ARTIFACT_ROOT: "mlflow-artifacts:/18/27ebc39cbfa147c287fa3a4eb0c1e52d/artifacts/rf_model"
+  CHECKPOINT: "model.pkl"
+  METADATA: "MLmodel"
+KEYFILE: "data/keyfile.yaml"
+MIL_MODEL:
+  ARTIFACT_ROOT: "mlflow-artifacts:/6/9e0cdea255ed4098a005374216bd2f46/artifacts/checkpoint"
+  CHECKPOINT: "model.pth"
+  SCALER: "scaler.pt"
+  METADATA: "MLmodel"
+  TESTIDS: "fold_test_ids.txt"
+  UUID: b5d59261d4da4b51ab8f8d812fe9cfc1
+  SNV_FEATERIZER:
+    snv_root_path: "...."
+    inhouse_freq_path: "..."
+  BASE_FEATURE: [
+    "ACMG_bayesian",
+    "symptom_similarity",
+    "vcf_info_QUAL",
+    "inhouse_freq",
+    "vaf",
+    "is_incomplete_zygosity",
+  ]
+  ADDITIONAL_FEATURES: [
+    "gnomad_gene:pLI",
+    "gnomad_gene:loeuf",
+    "SPLICEAI-VALUE",
+    "wes_AC",
+    "clinvar_variant:scv:pathogenicity_n_p",
+    "clinvar_variant:scv:pathogenicity_n_b"
+  ]
+  RULES: [
+        "PVS1",
+        "PS1",
+        "PS2",
+        "PS3",
+        "PS4",
+        "PM1",
+        "PM2",
+        "PM3",
+        "PM4",
+        "PM6",
+        "PM5",
+        "PP1",
+        "PP2",
+        "PP3",
+        "PP4",
+        "PP5",
+        "BA1",
+        "BS1",
+        "BS2",
+        "BS3",
+        "BS4",
+        "BP1",
+        "BP2",
+        "BP3",
+        "BP4",
+        "BP5",
+        "BP6",
+        "BP7",
+    ]

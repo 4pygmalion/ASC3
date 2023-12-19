@@ -1,5 +1,4 @@
 # 3ASC : Novel Variant Prioritization for Jointly prioritizing SNV and CNV and classifying reportability in rare disease
-[![테스트](https://github.com/3billion/3ASC-Confirmed-variant-Resys/actions/workflows/python-package.yml/badge.svg)](https://github.com/3billion/3ASC-Confirmed-variant-Resys/actions/workflows/python-package.yml)
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 

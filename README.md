@@ -1,4 +1,4 @@
-# 3ASC : Novel Variant Prioritization for Jointly prioritizing SNV and CNV and classifying reportability in rare disease
+# 3ASC : Variant prioritization tool leveraging multiple instance learning for rare Mendelian disease genomic testing
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
 [![DOI](https://img.shields.io/badge/DOI-10.1101/2024.04.18.24305632-blue)](https://doi.org/10.1101/2024.04.18.24305632)

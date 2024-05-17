@@ -1,7 +1,7 @@
 # 3ASC : Novel Variant Prioritization for Jointly prioritizing SNV and CNV and classifying reportability in rare disease
 [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/)
 [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/)
-[![DOI](https://img.shields.io/badge/DOI-10.1101/2024.04.18.24305632v1-blue)](https://doi.org/10.1101/2024.04.18.24305632v1)
+[![DOI](https://img.shields.io/badge/DOI-10.1101/2024.04.18.24305632-blue)](https://doi.org/10.1101/2024.04.18.24305632)
 
 **Figure 1**. Illustrated the architecture of 3ASC leveraging MIL
 ![3ASC](data/images/figure1_3asc.png) 

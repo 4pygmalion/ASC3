@@ -5,7 +5,10 @@ from typing import List
 from mlflow.tracking import MlflowClient
 
 TRACKING_URI = ""
+DATA_PATH = "/data2/heon_dev/repository/3ASC-Confirmed-variant-Resys/dataset_positive_negative.pickle"
 
+ORIGINAL_REPO_EXP_DIR = "/data/heon_dev/repository/3ASC-Confirmed-variant-Resys/experiments"
+RANDOM_STATE = 20230524
 RUN_ASC3_W_RANKNET = "29f1dfc8ee2b464cb6ec36627f12e429"
 RUN_ASC3_WO_RANKNET = "87cec01ac82a42a6a6fffce3b7543597"
 FOLD_RESULTS_PICKLE = "mlflow-artifacts:/6/{run_id}/artifacts/fold_result.pickle"

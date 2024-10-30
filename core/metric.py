@@ -67,7 +67,10 @@ class MetricHolder:
         if not prefix:
             return {attr: round(meter.avg, 5) for attr, meter in asdict(self).items()}
 
-        return {f"{prefix}_{attr}": round(meter.avg, 5) for attr, meter in asdict(self).items()}
+        return {
+            f"{prefix}_{attr}": round(meter.avg, 5)
+            for attr, meter in asdict(self).items()
+        }
 
 
 @dataclass
@@ -80,7 +83,10 @@ class MILMetricHolder(MetricHolder):
 
 
 def topk_recall(
-    instance_prob: np.ndarray, instance_label: np.ndarray, k: int = 5, is_any: bool = True
+    instance_prob: np.ndarray,
+    instance_label: np.ndarray,
+    k: int = 5,
+    is_any: bool = True,
 ) -> bool:
     """주어진 인스턴스 확률과 라벨에 대해 top-k 재현율을 계산
 
@@ -94,11 +100,15 @@ def topk_recall(
         bool: hit 여부
     """
 
-    instance_label = instance_label.ravel() if instance_label.ndim >= 2 else instance_label
+    instance_label = (
+        instance_label.ravel() if instance_label.ndim >= 2 else instance_label
+    )
     instance_prob = instance_prob.ravel() if instance_prob.ndim >= 2 else instance_prob
 
     if len(instance_label) != len(instance_prob):
-        raise ValueError("instance label length is not equal with that of instance_prob")
+        raise ValueError(
+            "instance label length is not equal with that of instance_prob"
+        )
 
     label_indices, *_ = np.where(instance_label == 1)
     prediction_indices = np.argsort(instance_prob)[-k:]
@@ -314,6 +324,104 @@ def plot_cv_auroc(
     plt.legend(loc="lower right")
 
 
+def plot_cv_auroc_ci(
+    fold_y_trues: List[np.ndarray], fold_y_probs: List[np.ndarray], ci=0.95
+) -> None:
+    """CV결과를 담은 AUROC를 시각화
+
+    Args:
+        y_true (List[np.ndarray]): 실제 라벨 값의 배열.
+        y_prob (List[np.ndarray]): 모델의 예측 확률 값의 배열.
+
+    Returns:
+        None: Matplotlib의 Figure와 Axes 객체를 반환
+
+    Example:
+        >>> fold_bag_y_trues = list()
+        >>> fold_bag_y_probs = list()
+        >>> for fold in ...
+                ...
+        >>>     fold_bag_y_trues.append(bag_labels)
+        >>>     fold_bag_y_probs.append(bag_probs)
+
+        >>> plot_cv_auroc(fold_bag_y_trues, fold_bag_y_probs)
+        >>> plt.savefig("cv_auroc.png")
+        >>> mlflow.log_artifact("cv_auroc.png")
+        >>> os.remove("cv_auroc.png")
+        >>> plt.clf()
+    """
+    plt.figure(figsize=(8, 6))
+    lw = 2
+    colors = cycle(["aqua", "darkorange", "cornflowerblue", "red", "purple"])
+
+    # Initialize lists to store individual fold's FPR, TPR, and AUROC
+    all_fpr = []
+    all_tpr = []
+    all_roc_auc = []
+
+    # Calculate AUROC for each fold and plot the ROC curve
+    for i, (y_true, y_prob) in enumerate(zip(fold_y_trues, fold_y_probs)):
+        fpr, tpr, _ = roc_curve(y_true, y_prob)
+        roc_auc = auc(fpr, tpr)
+        all_fpr.append(fpr)
+        all_tpr.append(tpr)
+        all_roc_auc.append(roc_auc)
+
+        # plt.plot(
+        #     fpr,
+        #     tpr,
+        #     color=next(colors),
+        #     lw=lw,
+        #     label="ROC curve (fold %d) (area = %0.2f)" % (i + 1, roc_auc),
+        # )
+
+    # Calculate the mean FPR and TPR across folds
+    max_length = max(len(arr) for arr in all_fpr)
+    interp_fpr = [
+        interp1d(np.arange(len(fpr)), fpr)(np.linspace(0, len(fpr) - 1, max_length))
+        for fpr in all_fpr
+    ]
+    interp_tpr = [
+        interp1d(np.arange(len(tpr)), tpr)(np.linspace(0, len(tpr) - 1, max_length))
+        for tpr in all_tpr
+    ]
+    mean_fpr = np.mean(interp_fpr, axis=0)
+    mean_tpr = np.mean(interp_tpr, axis=0)
+    mean_roc_auc = auc(mean_fpr, mean_tpr)
+
+    # Calculate standard deviation and CI for the mean TPR across folds
+    std_tpr = np.std(interp_tpr, axis=0)
+    lower_bound = mean_tpr - std_tpr * 1.96  # 95% CI for each point
+    upper_bound = mean_tpr + std_tpr * 1.96
+
+    upper_auc = round(np.percentile(all_roc_auc, 95), 4)
+    lower_auc = round(np.percentile(all_roc_auc, 5), 4)
+    plt.fill_between(
+        mean_fpr,
+        lower_bound,
+        upper_bound,
+        color="grey",
+        alpha=0.2,
+        label=f"95% Confidence Interval ([{upper_auc} - {lower_auc}])",
+    )
+
+    # Average ROC curve
+    plt.plot(
+        mean_fpr,
+        mean_tpr,
+        color="navy",
+        linestyle="--",
+        label="Mean ROC curve (area = %0.2f)" % mean_roc_auc,
+    )
+
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.title("Receiver Operating Characteristic")
+    plt.legend(loc="lower right")
+
+
 def plot_topk(
     instance_labels: List[np.ndarray],
     instance_probs: List[np.ndarray],
@@ -362,7 +470,11 @@ def plot_topk(
 
     fig, axes = plt.subplots()
     sns.barplot(
-        data=pd.DataFrame({"topk": ks, "recall": ys}), x="topk", y="recall", color="gray", ax=axes
+        data=pd.DataFrame({"topk": ks, "recall": ys}),
+        x="topk",
+        y="recall",
+        color="gray",
+        ax=axes,
     )
     return fig, axes
 

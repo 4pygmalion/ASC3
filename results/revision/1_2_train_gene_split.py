@@ -28,9 +28,10 @@ from matplotlib import pyplot as plt
 
 
 REVISIO_DIR = os.path.dirname(os.path.abspath(__file__))
-EXP_DIR = os.path.dirname(REVISIO_DIR)
-ROOT_DIR = os.path.dirname(EXP_DIR)
+RES_DIR = os.path.dirname(REVISIO_DIR)
+ROOT_DIR = os.path.dirname(RES_DIR)
 CORE_DIR = os.path.join(ROOT_DIR, "core")
+EXP_DIR = os.path.join(ROOT_DIR, "experiments")
 
 sys.path.append(ROOT_DIR)
 from utils.log_ops import get_logger

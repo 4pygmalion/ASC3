@@ -16,6 +16,7 @@ sys.path.append(ROOT_DIR)
 from core.data_model import PatientDataSet
 
 TRACKING_URI = ""
+EXP_NAME_MIL = "MIL_multimodal"
 DATA_PATH = "/data2/heon_dev/repository/3ASC-Confirmed-variant-Resys/dataset_positive_negative.pickle"
 
 ORIGINAL_REPO_EXP_DIR = (

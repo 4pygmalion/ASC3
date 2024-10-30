@@ -411,7 +411,7 @@ def plot_cv_auroc_ci(
         mean_tpr,
         color="navy",
         linestyle="--",
-        label="Mean ROC curve (area = %0.2f)" % mean_roc_auc,
+        label="Mean ROC curve (area = %0.3f)" % mean_roc_auc,
     )
 
     plt.xlim([0.0, 1.0])

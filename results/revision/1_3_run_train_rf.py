@@ -212,9 +212,9 @@ def snv_cnv_xy_split(patient_dataset: ExSCNVDataset):
     bags_patients = []
     for patient_idx in range(len(patient_dataset)):
         (snv_x, cnv_x), instance_label, bag_label = patient_dataset[patient_idx]
-        snv_x, cnv_x = snv_x.numpy(), cnv_x.numpy()
-        instance_label = instance_label.numpy()
-        bag_label = bag_label.numpy()
+        snv_x, cnv_x = snv_x.cpu().numpy(), cnv_x.cpu().numpy()
+        instance_label = instance_label.cpu().numpy()
+        bag_label = bag_label.cpu().numpy()
         snv_X_patients.append(snv_x)
         cnv_X_patients.append(cnv_x)
         snv_num = snv_x.shape[0]

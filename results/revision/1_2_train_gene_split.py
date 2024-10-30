@@ -48,8 +48,7 @@ from core.datasets import ExSCNVDataset
 from core.data_model import PatientDataSet
 from core.trainer import MILTrainer
 from core.networks import MultimodalAttentionMIL
-from mlflow_settings import TRACKING_URI, EXP_NAME_MIL
-from results.revision.revision_utils import split_by_gene
+from results.revision.revision_utils import split_by_gene, TRACKING_URI, EXP_NAME_MIL
 
 RUN_NAME = "baseline"
 RANDOM_STATE = 20230524
@@ -234,7 +233,7 @@ if __name__ == "__main__":
     MLFLOW_CLIENT = mlflow.MlflowClient(tracking_uri=TRACKING_URI)
     exp = MLFLOW_CLIENT.get_experiment_by_name(EXP_NAME_MIL)
     if exp is None:
-        exp = MLFLOW_CLIENT.create_experiment(MLFLOW_CLIENT)
+        exp = MLFLOW_CLIENT.create_experiment(EXP_NAME_MIL)
     exp_id = exp.experiment_id
     RUN_NAME = args.run_name if hasattr(args, "run_name") else RUN_NAME
 

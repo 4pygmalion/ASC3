@@ -266,11 +266,6 @@ if __name__ == "__main__":
         mlflow.log_artifact(os.path.join(CORE_DIR, "trainer.py"))
         mlflow.log_params(vars(args))
 
-        stratified_kfold = StratifiedKFold(5, random_state=RANDOM_STATE, shuffle=True)
-        stratified_kflod_iter = stratified_kfold.split(
-            train_val_test_dataset, train_val_test_dataset.bag_labels
-        )
-
         test_ids = list()
         fold_bag_y_trues = list()
         fold_bag_y_probs = list()
@@ -278,12 +273,21 @@ if __name__ == "__main__":
         fold_instance_y_probs = list()
         fold_positive_instance_y_trues = list()
         fold_positive_instance_y_probs = list()
-        for fold, (train_val_indices, test_indice) in enumerate(
-            stratified_kflod_iter, start=1
-        ):
+        for fold in range(1, 31):
             with mlflow.start_run(
                 experiment_id=exp_id, run_name=RUN_NAME + str(fold), nested=True
             ):
+                train_val_indices, test_indice = train_test_split(
+                    np.arange(len(train_val_test_dataset)),
+                    test_size=0.2,
+                    stratify=train_val_test_dataset.bag_labels,
+                )
+                train_indices, val_indices = train_test_split(
+                    np.arange(len(train_val_indices)),
+                    test_size=0.11,
+                    random_state=RANDOM_STATE,
+                    stratify=train_val_test_dataset.bag_labels[train_val_indices],
+                )
                 # train_indices, val_indices = train_test_split(
                 #     np.arange(len(train_val_indices)),
                 #     test_size=0.11,
@@ -338,6 +342,8 @@ if __name__ == "__main__":
                 bag_probs = []
                 instance_labels = []
                 instance_preds = []
+                positive_instance_labels = []
+                positive_instance_preds = []
                 for snv_X, snv_y, cnv_X, cnv_y, bag in zip(
                     snv_X_test, snv_y_test, cnv_X_test, cnv_y_test, bags_test
                 ):  # one for each patient
@@ -346,28 +352,22 @@ if __name__ == "__main__":
                     preds = np.concatenate([snv_preds, cnv_preds])
                     labels = np.concatenate([snv_y, cnv_y])
                     if bag:  # positive only for top-k recall
-                        instance_preds.append(preds)
-                        instance_labels.append(labels)
-
+                        positive_instance_preds.append(preds)
+                        positive_instance_labels.append(labels)
+                    instance_labels.append(labels)
+                    instance_preds.append(preds)
                     bag_probs.append(np.max(preds))
                     bag_labels.append(bag)
 
                 fold_bag_y_trues.append(bag_labels)
                 fold_bag_y_probs.append(bag_probs)
-                fold_positive_instance_y_trues.append(instance_labels)
-                fold_positive_instance_y_probs.append(instance_preds)
+                fold_instance_y_probs.append(instance_preds)
+                fold_instance_y_trues.append(instance_labels)
+                fold_positive_instance_y_trues.append(positive_instance_labels)
+                fold_positive_instance_y_probs.append(positive_instance_preds)
 
                 fig, axes = plot_auroc(bag_labels, bag_probs)
                 save_plot_and_clear("auroc.png")
-
-                fold_bag_y_trues.append(bag_labels)
-                fold_bag_y_probs.append(bag_probs)
-
-                plot_topk(instance_labels, instance_preds)
-                save_plot_and_clear("topk.png")
-
-                fold_instance_y_trues.append(instance_labels)
-                fold_instance_y_probs.append(instance_preds)
 
                 mlflow.log_metric(
                     "test_positive_top5",
@@ -380,9 +380,7 @@ if __name__ == "__main__":
                     ),
                 )
                 plot_topk(instance_labels, instance_preds)
-                save_plot_and_clear("test_positive_topk.png")
-                fold_positive_instance_y_trues.append(instance_labels)
-                fold_positive_instance_y_probs.append(instance_preds)
+                save_plot_and_clear("test_topk.png")
 
         plot_cv_auroc(fold_bag_y_trues, fold_bag_y_probs)
         save_plot_and_clear("cv_auroc.png")
@@ -403,7 +401,7 @@ if __name__ == "__main__":
             path="fold_result.pickle",
         )
         mlflow.log_artifact("fold_result.pickle")
-        mlflow.log_artifact(args.data_path)
+        # mlflow.log_artifact(args.data_path)
 
         # ext_snv_dataset = ExSCNVDataset(
         #     ext_snv_patient_dataset,

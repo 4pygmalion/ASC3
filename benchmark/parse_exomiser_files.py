@@ -111,8 +111,8 @@ class ExomiserOutputParser:
 
                 gene = row[col2idx["EXOMISER_GENE"]]
                 chr, pos, ref, alt, _others = row.split("\t", maxsplit=4)
-                others, gene_variant_score, gene_combing_score, contributing = row.rsplit(
-                    "\t", maxsplit=3
+                others, gene_variant_score, gene_combing_score, contributing = (
+                    row.rsplit("\t", maxsplit=3)
                 )
                 variant_score = row.rsplit("\t", maxsplit=5)[1]
 
@@ -127,12 +127,15 @@ class ExomiserOutputParser:
 
         return pd.DataFrame(res, columns=["cpra", "variant_score", "gene_score"])
 
-    def parse_variant(self, sample_id: str) -> pd.DataFrame:
+    def parse_variant(self, sample_id: str, inheritance: str = None) -> pd.DataFrame:
         sample_dir = os.path.join(self.root_dir, sample_id)
 
         res = list()
         all_inheritance_variant: Dict[str, Dict[str, float]] = dict()
         for inheritance_pattern in self.variant_inheritances:
+            if inheritance and inheritance != inheritance_pattern:
+                continue
+
             filename = f"{sample_id}_{inheritance_pattern}.{self.mode}.tsv"
             file_abs_path = os.path.join(sample_dir, filename)
 
@@ -170,11 +173,14 @@ class ExomiserOutputParser:
 
         return merged
 
-    def parse(self, sample_id: str) -> pd.DataFrame:
+    def parse(self, sample_id: str, inheritance: str = None) -> pd.DataFrame:
         sample_dir = os.path.join(self.root_dir, sample_id)
 
         all_inheritance_variant: Dict[str, Dict[str, float]] = dict()
         for inheritance_pattern in self.variant_inheritances:
+            if inheritance and inheritance != inheritance_pattern:
+                continue
+
             filename = f"{sample_id}_{inheritance_pattern}.{self.mode}.tsv"
             file_abs_path = os.path.join(sample_dir, filename)
 

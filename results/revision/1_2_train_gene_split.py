@@ -303,6 +303,9 @@ if __name__ == "__main__":
                     scalers=scalers,
                     device=args.device,
                 )
+                test_ids.append(
+                    [patient_data.sample_id for patient_data in test_patient_data]
+                )
                 test_positive_dataset = ExSCNVDataset(
                     PatientDataSet(
                         [
@@ -452,16 +455,16 @@ if __name__ == "__main__":
                 mlflow.log_artifact("scaler.pt", "checkpoint")
                 os.remove("scaler.pt")
 
-                save_pickle(
-                    {
-                        "fold_bag_y_trues": fold_bag_y_trues,
-                        "fold_bag_y_probs": fold_bag_y_probs,
-                        "fold_instance_y_trues": fold_instance_y_trues,
-                        "fold_instance_y_probs": fold_instance_y_probs,
-                        "fold_positive_instance_y_trues": fold_positive_instance_y_trues,
-                        "fold_positive_instance_y_probs": fold_positive_instance_y_probs,
-                        "test_ids": test_ids,
-                    },
-                    path="fold_result.pickle",
-                )
-                mlflow.log_artifact("fold_result.pickle")
+        save_pickle(
+            {
+                "fold_bag_y_trues": fold_bag_y_trues,
+                "fold_bag_y_probs": fold_bag_y_probs,
+                "fold_instance_y_trues": fold_instance_y_trues,
+                "fold_instance_y_probs": fold_instance_y_probs,
+                "fold_positive_instance_y_trues": fold_positive_instance_y_trues,
+                "fold_positive_instance_y_probs": fold_positive_instance_y_probs,
+                "test_ids": test_ids,
+            },
+            path="fold_result.pickle",
+        )
+        mlflow.log_artifact("fold_result.pickle")

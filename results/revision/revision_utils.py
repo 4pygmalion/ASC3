@@ -18,16 +18,19 @@ from core.data_model import PatientDataSet, PatientData
 TRACKING_URI = ""
 EXP_NAME_MIL = "MIL_multimodal"
 DATA_PATH = "/data2/heon_dev/repository/3ASC-Confirmed-variant-Resys/dataset_positive_negative.pickle"
-
+DATA_PATH = "/home/heon/dev/ASC3/dataset_positive_negative.pickle"
 ORIGINAL_REPO_EXP_DIR = (
     "/data/heon_dev/repository/3ASC-Confirmed-variant-Resys/experiments"
 )
 RANDOM_STATE = 20230524
+
 BOOSTRAP_RUN_ID = "07397e4fda5f4dcdb6e98438382428a0"
 RF_RUN_ID = "4c2634a1990f454f8b70dbd05687c5f1"
 GENE_SPLIT_ID = "f1dab109b0354a128bec0a2274001d2f"
 RUN_ASC3_W_RANKNET = "29f1dfc8ee2b464cb6ec36627f12e429"
 RUN_ASC3_WO_RANKNET = "87cec01ac82a42a6a6fffce3b7543597"
+ASC3_V1_RUN_ID = "13b463ffd5ac4d8ebb1f2062cd3cbe19"
+
 FOLD_RESULTS_PICKLE = "mlflow-artifacts:/6/{run_id}/artifacts/fold_result.pickle"
 
 BM_DIR = "/data/heon_dev/repository/3ASC-Confirmed-variant-Resys/notebooks/MIL"

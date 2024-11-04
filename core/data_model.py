@@ -315,7 +315,7 @@ class PatientDataSet:
                 subset = list()
                 for sample_id in sample_ids:
                     if sample_id not in self.sample_id_to_idx:
-                        raise IndexError(f"Passed sample_id({str}) not found.")
+                        raise IndexError(f"Passed sample_id({sample_id}) not found.")
                     subset.append(self.data[self.sample_id_to_idx[sample_id]])
                 return PatientDataSet(subset)
 

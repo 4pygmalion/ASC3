@@ -286,3 +286,50 @@ def benchmark_exomsier(df, casual_variants: list, k: int, score_col) -> bool:
         return False
 
     return True
+
+
+### BACKUP
+# DATASET_PATH = "/data2/heon_dev/repository/3ASC-Confirmed-variant-Resys/dataset_positive_negative.pickle"
+# PARENT_RUN_ID = "29f1dfc8ee2b464cb6ec36627f12e429"
+# PARENT_RUN_ID_WO_RANK = "87cec01ac82a42a6a6fffce3b7543597"
+# FOLD = 1
+# FOLD_RUN_ID = "28fd9b900bd94db7b3f07934dbaf8ae2"
+# MODEL_PATH = f"mlflow-artifacts:/6/{FOLD_RUN_ID}/artifacts/checkpoint"
+# SCALER_PATH = f"mlflow-artifacts:/6/{FOLD_RUN_ID}/artifacts/checkpoint/scaler.pt"
+additional_features = [
+    "gnomad_gene:pLI",
+    "gnomad_gene:loeuf",
+    "SPLICEAI-VALUE",
+    "wes_AC",
+    "wgs_AC",
+    "clinvar_variant:scv:pathogenicity_n_p",
+    "clinvar_variant:scv:pathogenicity_n_b",
+    "PVS1",
+    "PS1",
+    "PS2",
+    "PS3",
+    "PS4",
+    "PM1",
+    "PM2",
+    "PM3",
+    "PM4",
+    "PM6",
+    "PM5",
+    "PP1",
+    "PP2",
+    "PP3",
+    "PP4",
+    "PP5",
+    "BA1",
+    "BS1",
+    "BS2",
+    "BS3",
+    "BS4",
+    "BP1",
+    "BP2",
+    "BP3",
+    "BP4",
+    "BP5",
+    "BP6",
+    "BP7",
+]

@@ -162,3 +162,4 @@ cython_debug/
 experiments/
 *.csv
 *.pickle
+*.yaml

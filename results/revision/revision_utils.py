@@ -1,9 +1,11 @@
 import os
 import sys
-from typing import List, Union
+from typing import List, Union, Dict
+from enum import Enum
 
 import tqdm
 import numpy as np
+import pandas as pd
 from mlflow.entities import Run
 from mlflow.tracking import MlflowClient
 from sklearn.model_selection import train_test_split
@@ -36,6 +38,11 @@ BM_DIR = "/data/heon_dev/repository/3ASC-Confirmed-variant-Resys/notebooks/MIL"
 DISEASE_DATA = (
     "/DAS/data/personal/sean_dev/misc/20241017.3asc_revision/result/disease.txt.gz"
 )
+
+
+class Benchmarks(Enum):
+    lirical = "lirical"
+    exomiser = "exomiser"
 
 
 def open_pickle(path):
@@ -286,6 +293,41 @@ def benchmark_exomsier(df, casual_variants: list, k: int, score_col) -> bool:
         return False
 
     return True
+
+
+def get_combination_topk(
+    exomiser_result: Dict[str, pd.DataFrame],
+    lricial_result: Dict[str, pd.DataFrame],
+    k: int,
+    patient_dataset: PatientDataSet,
+) -> dict:
+
+    n_samples = len(exomiser_result)
+    n_hits = 0
+
+    # get top K gene
+    candidate_samples = list(exomiser_result.keys() & lricial_result.keys())
+    for sample_id in candidate_samples:
+        _exomiser_df = exomiser_result[sample_id].copy()
+        _exomiser_df = _exomiser_df.sort_values("variant_score", ascending=False)
+        top_k_variant_exomiser = set(_exomiser_df.cpra.to_list()[:k])
+
+        _lirical_df = lricial_result[sample_id].copy()
+        _lirical_df = _lirical_df.sort_values("score", ascending=False)
+        top_k_variant_lirical = set(_lirical_df.cpra.to_list()[:k])
+
+        candidate_variants = top_k_variant_exomiser & top_k_variant_lirical
+
+        casual_variants = {
+            cpra
+            for (cpra, disease_id) in patient_dataset[sample_id].snv_data.causal_variant
+        }
+
+        is_hit = candidate_variants & casual_variants
+        if is_hit:
+            n_hits += 1
+
+    return n_hits / n_samples
 
 
 ### BACKUP

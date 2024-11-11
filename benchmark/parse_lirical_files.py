@@ -152,9 +152,12 @@ class LiricalOutputParser:
 
             for idx, row in enumerate(fh):
                 row = row.strip().split("\t")
+                postprob = row[col2idx["posttestprob"]]
+                postprob = float(postprob.replace("%", ""))
+
                 cpra_score_pairs = self._split_tokens(row[col2idx["variants"]])
                 for cpra, score in cpra_score_pairs:
-                    data[cpra] = max(data[cpra], score)
+                    data[cpra] = max(data[cpra], postprob)
 
         return data
 
